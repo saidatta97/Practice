@@ -1,0 +1,20 @@
+http_port 3129 intercept
+
+iptables -t nat -A OUTPUT -p tcp --dport 443 -m owner ! --gid-owner 23 -j REDIRECT --to-port 	3129
+
+1. acl blacklist dstdomain www.washington.edu www.go.com
+	http_access deny blacklist
+	http_access allow all
+	
+2. acl safelist dstdomain www.washington.edu www.go.com
+	http_access allow safelist
+	http_access deny all
+	
+3. acl block_time time 9:00-17:00
+	http_access deny block_time
+	http_access allow all
+	
+4. acl blacklist dstdomain www.washington.edu www.go.com
+	acl block_time time 14:00-17:00
+	http_access deny block_time blacklist
+	http_access allow all

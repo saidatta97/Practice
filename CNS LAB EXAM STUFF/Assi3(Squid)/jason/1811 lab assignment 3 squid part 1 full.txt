@@ -1,0 +1,94 @@
+2. Block Amazon and Flipkart and allow all other websites.
+	acl blacklist dstdomain www.amazon.com www.flipkart.com
+	http_access deny blacklist
+	http_access allow all
+
+3. Block all other websites and allow Amazon and Flipkart .
+	acl safelist dstdomain www.amazon.com www.flipkart.com
+	http_access allow safelist
+	http_access deny all
+
+4. Block all websites between 9 am to 5 pm.
+	acl block_time time 9:00-17:00
+	http_access deny block_time
+	http_access allow all
+
+5. Block all websites between 9 am to 1 pm.
+	acl block_time time 9:00-13:00
+	http_access deny block_time
+	http_access allow all
+
+6. Block Amazon and Flipkart between 2 pm to 5 pm all websites.
+	acl blacklist dstdomain www.amazon.com www.flipkart.com
+	acl block_time time 14:00-17:00
+	http_access deny block_time blacklist
+	http_access allow all
+
+7. Create three users, Alice, Bob, Darth.
+	htpasswd -c userpasswd alice
+	htpasswd userpasswd bob
+	htpasswd userpasswd darth
+
+8. Allow access to all websites only after user authentication.
+	acl authusers proxy_auth REQUIRED
+	http_access allow authusers
+	http_access deny all
+
+9. Allow access to Amazon and Flipkart only after user authentication. Allow free access to other sites.
+   	acl safelist dstdomain www.amazon.com www.flipkart.com
+   	acl authusers proxy_auth REQUIRED
+   	http_access allow safelist authusers 
+   	http_access allow all
+   	
+10. Allow Access to Amazon and Flipkart without authentication. Other sites need user to be authenticated.
+	acl safelist dstdomain www.amazon.com www.flipkart.com
+	acl authusers proxy_auth REQUIRED
+	http_access allow !safelist authusers 
+	http_access allow all
+   		
+11. Allow Alice to access only Amazon and Flipkart. Allow Bob to access only YouTube and Twitter. No access to Darth. No access without user authentication.
+    acl accListAlice dstdomain www.amazon.com www.flipkart.com
+	acl accListBob dstdomain www.youtube.com .twitter.com
+	acl authusers proxy_auth REQUIRED
+	acl useralice proxy_auth alice
+	acl userbob proxy_auth bob
+	acl userdarth proxy_auth darth
+	http_access allow accListAlice useralice
+	http_access allow accListBob userbob
+	http_access deny userdarth
+	http_access allow !useralice !userbob !userdarth
+	http_access deny all
+	
+12. Allow Alice access to Amazon and Flipkart only between 1 to 2pm, rest all the time. Allow Bob access to YouTube and Twitter only between 5 to 6 pm., rest all the time. Allow Darth to access the four websites all the time and nothing else.
+    acl accListAlice dstdomain www.amazon.com www.flipkart.com
+	acl accListBob dstdomain www.youtube.com .twitter.com
+	acl accListDarth dstdomain www.youtube.com .twitter.com www.amazon.com www.flipkart.com
+	acl access_time1 time 13:00-14:00
+	acl access_time2 time 17:00-18:00
+	acl authusers proxy_auth REQUIRED
+	acl useralice proxy_auth alice
+	acl userbob proxy_auth bob
+	acl userdarth proxy_auth darth
+	http_access allow access_time1 accListAlice useralice
+	http_access allow access_time2 accListBob userbob
+	http_access allow userdarth accListDarth
+	http_access allow !accListAlice useralice
+	http_access allow !accListBob userbob
+	http_access deny all
+	
+13. Same as above. Allow Darth to access all websites at all times.
+	acl accListAlice dstdomain www.amazon.com www.flipkart.com
+	acl accListBob dstdomain www.youtube.com .twitter.com
+	acl access_time1 time 13:00-14:00
+	acl access_time2 time 17:00-18:00
+	acl authusers proxy_auth REQUIRED
+	acl useralice proxy_auth alice
+	acl userbob proxy_auth bob
+	acl userdarth proxy_auth darth
+	http_access allow access_time1 accListAlice useralice
+	http_access allow access_time2 accListBob userbob
+	http_access allow userdarth
+	http_access allow !accListAlice useralice
+	http_access allow !accListBob userbob
+	http_access deny all
+   	

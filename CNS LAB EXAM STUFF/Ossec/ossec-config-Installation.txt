@@ -1,0 +1,130 @@
+OSSEC installation and configuration 
+Using root
+1:
+	yum groupinstall 'Development Tools
+	yum install openssl-devel
+
+2:
+	Download OSSEC WUI from 
+	tar.gz file
+
+	https://github.com/ossec/ossec-wui/releases 
+
+	Download OS sepecific (Fedora or Ubuntu) OSSEC (3 files )from
+
+	https://updates.atomicorp.com/channels/atomic/
+
+	select your os - > version -> x64 or x32 
+	type of package RPM (Fedora)  and download 
+
+	ossec-hids-3.6.0-14066.fc32.art.x86_64.rpm
+	ossec-hids-agent-3.6.0-14066.fc32.art.x86_64.rpm
+	ossec-hids-server-3.6.0-14066.fc32.art.x86_64.rpm
+
+	Go to Download Dir
+
+	yum install ossec-hids-3.6.0-14066.fc32.art.x86_64.rpm 
+	yum install ossec-hids-server-3.6.0-14066.fc32.art.x86_64.rpm
+
+	cd /var/ossec/bin
+
+	./ossec-control start
+
+
+3:
+	OSSEC WUI configuration 
+	Go to download dir
+
+	tar xvzf ossec-wui-0.9.tar.gz 
+	mv ossec-wui-0.9 /var/www/html/ossec-wui
+
+	cd /var/www/html/ossec-wui
+	ls -laZ
+
+	"if SELinux permission are not httpd_sys_content_t"
+
+	cd ..
+	chcon -R -t httpd_sys_content_t ossec-wui
+
+	check again the permission (ls -laZ)
+
+	gedit README 
+
+	1:
+	cd /var/www/html/ossec-wui
+	./setup.sh
+
+	create a user and password
+
+	2:
+	create a te file 
+	/etc/seliinux/targeted/ossec-wui/ossec-wui.te
+	1:create a dir ossec-wui under  /etc/selinux/targeted
+	2:create a file ossec-wui.te in ossec-wui dir
+
+	Copy below content to "ossec-wui.te file"
+	
+	
+	  module ossec-wui 1.0;
+
+	    require {
+		type var_log_t;
+		type httpd_t;
+		type var_t;
+		class file { read getattr open };
+	    }
+
+	    #============= httpd_t ==============
+	    allow httpd_t var_log_t:file read;
+	    allow httpd_t var_t:file { read getattr open };
+
+	
+	
+	Then run the following commands as root:
+	
+   	checkmodule -M -m ossec-wui.te -o ossec-wui.mod
+    	semodule_package -o ossec-wui.pp -m ossec-wui.mod
+    	semodule -i ossec-wui.pp 
+
+
+4:
+	Testing config
+
+	start httpd
+
+	(port must be 80 incase it is changed)
+	systemctl start httpd 
+
+	open web browser 
+	localhost/ossec-wui  (If it loads directory instead of page)
+
+	yum install php
+
+	systemctl restart httpd
+	localhost/ossec-wui 
+
+
+
+You should be able to access it now 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

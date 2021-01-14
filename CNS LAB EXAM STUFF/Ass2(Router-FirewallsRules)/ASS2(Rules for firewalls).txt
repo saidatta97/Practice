@@ -1,0 +1,32 @@
+=======================================================================================
+Router Forwarding Firewall Rules(Assignment 1)
+========================================================================================
+
+Local net to intenet    //allow all traffic
+iptables -A FOREWARD -i eth0 -o eth1 -j ACCEPT
+
+Internet to Local Net   //allow related traffic
+iptables -A FOREWARD -i eth1 -o eth0 -m --state ESTABLISHED,RELATED -j ACCEPT
+
+Local Net to Webserver  //allow 80,443 tcp
+iptables -A FOREWARD -i eth0 -o eth2 -p tcp --dport 80 -j ACCEPT
+iptables -A FOREWARD -i eth0 -o eth2 -p tcp --dport 443 -j ACCEPT
+
+webserver to Local net  //allow related traffic
+iptables -A FOREWARD -i eth2 -o eth0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+Internet to webServer   //allow 443 tcp
+iptables -A FOREWARD -i eth1 -o eth2 -p tcp --dport 443 -j ACCEPT
+
+Webserver to Internet   //allow related traffic
+iptables -A FOREWARD -i eth2 -o eth1 -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+
+============================================================================================
+WEBSWEVER Firewall Rules(Assignment 2)
+============================================================================================
+
+iptables -A INPUT -p tcp --dport 80 -s 10.* -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT

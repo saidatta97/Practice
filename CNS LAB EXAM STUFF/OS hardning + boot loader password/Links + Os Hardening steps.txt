@@ -1,0 +1,10 @@
+https://security.utexas.edu/os-hardening-checklist/linux-7
+
+
+OS hardning
+
+1) Remove legacy services (e.g., telnet-server; rsh, rlogin, rcp; ypserv, ypbind; tftp, tftp-server; talk, talk-server).
+2) Disable any services and applications started by xinetd or inetd that are not being utilized.
+3) Remove xinetd, if possible.	
+4) Disable legacy services (e.g., chargen-dgram, chargen-stream, daytime-dgram, daytime-stream, echo-dgram, echo-stream, tcpmux-server).	
+5) Disable or remove server services that are not going to be utilized (e.g., FTP, DNS, LDAP, SMB, DHCP, NFS, SNMP, etc.).			

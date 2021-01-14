@@ -1,0 +1,57 @@
+
+
+getenforce => enforcing   // to check selinux
+dnf install httpd         //to install httpd
+
+************part1
+
+cd /var/www 
+cd html
+cat > trail.html
+<html>
+<head>
+</head>
+<body>
+<p>helllo</p>
+</body>
+</html>
+
+ls -lZ
+systemctl start httpd
+
+open browser and type 
+http://localhost/trail.html
+
+*************************part2
+
+cd /var/www/cgi-bin/
+cat > trail.cgi
+#!/bin/bash
+
+echo 'Content-type: text/html'
+echo ''
+echo 'welcome'
+
+chmod u+r+w+x,g+r+x,o+r+x trail.cgi
+ls -lZ
+systemctl start httpd
+http://localhost/cgi-bin/trail.cgi
+
+
+*****************************part3
+
+make a directory in home
+mkdir public_html
+cd public_html
+cat > trail.html
+<html>
+<head>
+</head>
+<body>
+<p>helllo</p>
+</body>
+</html>
+
+ls -lZ
+systemctl start httpd
+localhost/~user/trail.html

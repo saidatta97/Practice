@@ -1,0 +1,122 @@
+1)
+Open Browser -> Preferences -> Network Settings
+Select Manual Proxy Configuation
+Http Proxy = 127.0.0.1
+Port = 3128
+Click ok
+
+2)
+acl blacklist dstdomain www.flipkart.com www.amazon.com
+http_access deny blacklist
+
+3)
+acl blacklist dstdomain www.flipkart.com www.amazon.com
+http_access deny !blacklist
+
+4)
+acl time_bet time 9:00-17:00
+http_access deny time_bet
+
+5)
+acl time_bet time 9:00-13:00
+http_access deny time_bet
+
+6)
+acl blacklist dstdomain www.flipkart.com www.amazon.com
+acl time_bet time 14:00-17:00
+http_access deny blacklist time_bet
+
+
+7)
+To create user pass file
+htpasswd -c npasswd alice
+type pass
+cat npasswd
+
+To create one more user
+htpasswd npasswd bob
+
+8)
+At first line 
+auth_param basic program /usr/lib64/squid/basic_ncsa_auth /etc/squid/npasswd
+================================================================
+acl authusers proxy_auth REQUIRED
+http_access allow authusers
+http_access deny all
+9)
+
+acl blacklist dstdomain www.amazon.com www.flipkart.com
+acl authusers proxy_auth REQUIRED
+http_access allow blacklist authusers
+#https_access allow all
+
+10)
+acl blacklist dstdomain www.amazon.com www.flipkart.com
+acl authusers proxy_auth REQUIRED
+http_access allow blacklist
+http_access allow !blacklist authusers 
+
+#https_access allow all
+
+
+11)
+acl writes1 dstdomain www.amazon.com www.flipkart.com
+acl writes2 dstdomain www.youtube.com www.twitter.com
+acl alice proxy_auth alice
+acl bob proxy_auth bob
+acl dart proxy_auth dart
+
+http_access allow writes1 alice
+http_access deny !writes1 alice
+http_access allow writes2 bob
+http_access deny !writes2 bob
+http_access deny all
+
+12)
+
+
+
+13)
+
+
+
+
+==========================================================================================================
+==========================================================================================================
+
+
+
+Assi 4 Transparent Mode(Using 3129 port INTERCEPT)
+
+Remove Proxy Settings => set to No proxy
+http_port 3129 intercept => add this in squid.config
+id -g squid => to get Gid Ans (23)  
+iptables -t nat -A OUTPUT -p tcp --dport 80 -m owner ! --gid-owner 23 -j REDIRECT --to-port 3129
+iptables -t nat -A OUTPUT -p tcp --dport 443 -m owner ! --gid-owner 23 -j REDIRECT --to-port 3129
+
+then start squid ..... Done !!!!
+Check on Http sites
+like eg www.weevil.com  tourism.gov.in  washington.edu etc
+
+
+1)
+acl blacklist dstdomain www.washington.edu www.weevil.com
+http_access deny blacklist
+
+2)
+acl blacklist dstdomain www.washington.edu www.weevil.com
+http_access deny !blacklist
+
+
+3)
+acl time_bet time 9:00-17:00
+http_access deny time_bet
+
+4)
+acl blacklist dstdomain www.washington.edu www.weevil.com
+acl time_bet time 14:00-17:00
+http_access deny blacklist time_bet
+
+5)
+
+
