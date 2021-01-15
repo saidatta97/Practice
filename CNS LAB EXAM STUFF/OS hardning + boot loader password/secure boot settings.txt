@@ -1,0 +1,23 @@
+1)Ensure permissions on bootloader config are configured
+
+ chown root:root /boot/grub2/grub.cfg
+# chmod og-rwx /boot/grub2/grub.cfg
+# chown root:root /boot/grub2/grubenv
+# chmod og-rwx /boot/grub2/grubenv
+
+2) Ensure bootloader password is set
+
+Create an encrypted password with grub2-setpassword :
+# grub2-setpassword
+Enter password: <password>
+Confirm password: <password>
+Run the following command to update the grub2 configuration:
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+
+3) Ensure authentication required for single user mode
+
+Edit /usr/lib/systemd/system/rescue.service and add/modify the following line:
+ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue
+
+Edit /usr/lib/systemd/system/emergency.service and add/modify the following line:
+ExecStart=-/usr/lib/systemd/systemd-sulogin-shell emergency

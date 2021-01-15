@@ -1,0 +1,14 @@
+1) Ensure GPG keys are configured
+
+Verify GPG keys are configured correctly for your package manager. Depending on the
+package management in use one of the following command groups may provide the needed
+information:
+# rpm -q gpg-pubkey --qf '%{name}-%{version}-%{release} --> %{summary}\n'
+
+2) Ensure loopback traffic is configured
+
+Run the following commands to implement the loopback rules:
+# nft add rule inet filter input iif lo accept
+# nft create rule inet filter input ip saddr 127.0.0.0/8 counter drop
+# nft add rule inet filter input ip6 saddr ::1 counter drop
+

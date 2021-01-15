@@ -1,0 +1,42 @@
+DAC permismmision => RWX
+MAC permission => lables or context
+
+seliux means security enhancement linux uses both DAC n MAC  
+
+*** selinux is based on context/lables
+
+selinuxenabled
+echo $?
+ans 0 => selinux enabled
+
+getenforce 
+=> Enforcing means running
+
+setenforce 0
+getenforce
+=>permissive means checks is done still access is allowed
+
+cd /etc/selinux
+ls -lZ => user label role label type label entire this is seliunx context
+
+ps -eZ =>process lables/context
+id -Z
+
+lables are attched to files process users
+httd domain has separate labes httd_t confined resources means limited access(own domain)
+
+unconfined means more(all) access
+
+
+semanage login -l => to check root confined rules
+
+cd var/www/
+
+-u user context
+-r role
+-t type
+
+chcon -t user_home_t trail.html  // change context
+ls -lZ
+
+chcon -t bin_t /usr/sbin/httpd // change process context

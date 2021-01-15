@@ -1,0 +1,60 @@
+******************Boot Loader
+
+grub2-setpassword // set password
+grub2-mkconfig -o /boot/grub2/grub.cfg // update file
+
+
+********************Selinux
+
+dnf install libselinux
+getenforce 
+
+Ensure SELinux policy is configured
+Edit the /etc/selinux/config file to set the SELINUXTYPE parameter:
+SELINUXTYPE=targeted
+
+Ensure the SELinux state is enforcing
+Edit the /etc/selinux/config file to set the SELINUX parameter:
+SELINUX=enforcing
+
+Ensure no unconfined services exist
+ps -eZ | grep unconfined_service_t // check
+
+Ensure SETroubleshoot is not installed
+rpm -q setroubleshoot
+dnf remove setroubleshoot
+
+
+***************************OS Hardaning
+
+Remove telnet-server
+yum erase telnet-server
+
+Remove telnet Clients
+yum erase telnet
+
+Remove rsh-server
+yum erase rsh-server
+
+Remove rsh
+yum erase rsh
+
+Remove NIS Client
+yum erase ypbind
+
+Remove xinetd
+yum erase xinetd
+
+Set Daemon umask
+Add the following line to the /etc/sysconfig/init file.
+umask 027
+
+Remove X Windows
+yum groupremove "X Window System"
+
+Remove DNS Server
+yum erase bind 
+
+Remove FTP server
+yum erase vsftpd
+

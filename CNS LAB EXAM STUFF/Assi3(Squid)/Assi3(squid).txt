@@ -27,6 +27,22 @@ acl time_bet time 14:00-17:00
 http_access deny blacklist time_bet
 
 
+
+acl list1 dstdomain www.google.com www.facebook.com
+acl list2 dstdomain www.google.com www.amazon.com
+acl time_bet time 10:00-12:00
+
+acl alice proxy_auth alice
+acl bob proxy_auth bob
+acl dart proxy_auth dart
+
+http_access allow alice
+http_access allow time_bet bob
+http_access allow dart list2   
+http_access allow all list1   
+
+
+
 7)
 To create user pass file
 htpasswd -c npasswd alice

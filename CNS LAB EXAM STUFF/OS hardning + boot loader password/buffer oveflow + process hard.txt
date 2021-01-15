@@ -1,0 +1,35 @@
+
+
+1) Configure ExecShield
+
+Add the following line to the /etc/sysctl.conf file.
+kernel.exec-shield = 1
+
+2) Enable XD/NX Support on 32-bit x86 Systems
+
+yum list kernel-PAE
+kernel-PAE.<hardware platform> <release> installed
+Remediation:
+# yum install kernel-PAE
+
+3) Remove NIS Client
+
+Perform the following to determine if ypbind is installed on the system.
+# yum list ypbind
+ypbind.<hard platform> <release> <anything except installed>
+Remediation:
+# yum erase ypbind
+
+4) Restrict Core Dumps (Process hard)
+
+Perform the following to determine if core dumps are restricted.
+# grep "hard core" /etc/security/limits.conf
+* hard core 0
+# sysctl fs.suid_dumpable
+fs.suid_dumpable = 0
+Remediation:
+Add the following line to the /etc/security/limits.conf file.
+* hard core 0
+Add the following line to the /etc/sysctl.conf file.
+
+fs.suid_dumpable = 0
