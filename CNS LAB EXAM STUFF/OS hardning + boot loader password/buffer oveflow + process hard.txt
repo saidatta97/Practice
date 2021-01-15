@@ -7,6 +7,8 @@ kernel.exec-shield = 1
 
 2) Enable XD/NX Support on 32-bit x86 Systems
 
+# dmesg | grep NX
+
 yum list kernel-PAE
 kernel-PAE.<hardware platform> <release> installed
 Remediation:
