@@ -1,0 +1,23 @@
+SELECT DATEDIFF(day, '2021/02/22',GETDATE()) AS DateDiff;
+select cast(getdate() as date)
+
+CREATE TABLE Person (
+    PersonID int,
+    PersonName varchar(255),
+	PersonDob datetime
+);
+
+INSERT INTO dbo.Person(PersonID,PersonName,PersonDob)
+VALUES(1,'saidatta',GETDATE());
+
+
+select * from Person as p where DATEDIFF(day,GETDATE(),p.PersonDob) = 0;
+
+
+IF EXISTS (select PersonID from Person where PersonID not in(Select PersonID from PersonNew))
+		BEGIN
+			--select * from #copy7;
+			--Update PersonNew set PersonName='vinay'
+			INSERT INTO PersonNew VALUES(p.PersonID,p.PersonName,p.PersonDob) 	
+		END
+

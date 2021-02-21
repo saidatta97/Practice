@@ -1,0 +1,81 @@
+-- ================================================
+-- Template generated from Template Explorer using:
+-- Create Procedure (New Menu).SQL
+--
+-- Use the Specify Values for Template Parameters 
+-- command (Ctrl-Shift-M) to fill in the parameter 
+-- values below.
+--
+-- This block of comments will not be included in
+-- the definition of the procedure.
+-- ================================================
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[fillPersonNew] 
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here
+	IF EXISTS (SELECT Person.PersonID,Person.PersonName,Person.PersonDob into #copy5 FROM Person
+		WHERE DATEDIFF(day,GETDATE(),Person.PersonDob) = 0)
+		BEGIN
+			--select * from #copy2;
+			--select * from PersonNew;
+			
+			--declare @count int; 
+			--Set @count = (select count(*) from #copy2);
+			--select @count
+			
+			--declare @date datetime
+			--set @date=GETDATE();
+			--select @date
+			
+			--declare @pdob datetime;
+			--declare @pid int;
+			--declare @pname varchar(233); 
+			--set @pname=p.PersonName;
+			--select @pname
+			--Update PersonNew set PersonName='vinay'
+			select * from PersonNew
+			select cast(getdate() as date)
+			INSERT INTO dbo.Person(PersonID,PersonName,PersonDob)
+			VALUES(4,'khushoo',GETDATE());
+
+			
+			UPDATE PersonNew
+			SET
+			PersonName=p.PersonName 
+			--PersonNew.PersonDob=Person.PersonDob
+			from PersonNew pn
+			inner join Person p on pn.PersonID=p.PersonID
+						
+			--Insert into PersonNew
+			--Select * from #copy5 where #copy5.PersonID=PersonNew.PersonID;
+
+		END
+		
+		
+	ELSE
+	
+	IF EXISTS (select * into #copy9 from Person where PersonID not in(Select PersonID from PersonNew))
+		BEGIN
+			--select * from PersonNew;
+			--Update PersonNew set PersonName='vinay'
+			--INSERT INTO PersonNew VALUES (#copy8.PersonID,#copy8.PersonName,#copy8.PersonDob)
+			Insert into PersonNew
+			Select * from #copy9;
+		END
+	
+
+END
+GO
